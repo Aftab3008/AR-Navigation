@@ -1,0 +1,50 @@
+# AR Navigation Project Overview
+
+## 1. Project Summary
+This project is an **AR Navigation Application** template built with Unity and Vuforia. It is designed to navigate users indoors by calculating physical paths (using Unity's NavMesh) and projecting those paths onto the real world using Augmented Reality (via Vuforia Engine Area Targets). The application also interacts with custom backend servers to send analytics, such as when a user visits a Point of Interest (POI).
+
+## 2. Target Platforms (Android & iOS)
+**Yes, this project produces applications for both Android and iOS.**
+Unity is inherently a cross-platform engine. Specifically in this codebase:
+- The package configurations ([Packages/manifest.json](file:///home/aftab/Desktop/ar-nav-community-main/Packages/manifest.json)) contain `com.unity.modules.androidjni` for Android support and `com.unity.modules.xr` and AR-related packages.
+- The [README.md](file:///home/aftab/Desktop/ar-nav-community-main/README.md) changelog explicitly notes the successful implementation of an **iOS build** (Version 0.1.0).
+- You can build the app for either platform by changing your Build Target in Unity's "Build Settings" (`File -> Build Settings`).
+
+## 3. Core Technologies Used
+Here is a detailed breakdown of the tools piecing this application together:
+- **Unity Engine (2022.3.x):** The core 3D engine used to create the application. It handles user inputs, rendering the 3D graphics (like the path visualizer), physics (like colliders on POIs), and cross-platform compilation.
+- **Vuforia Engine (`com.ptc.vuforia.engine`):** The primary Augmented Reality SDK. Vuforia is used here specifically for **Area Targets**, allowing the app to scan a large-scale physical environment (like a room or hallway) and track the user's position accurately within it.
+- **Unity NavMesh (`com.unity.ai.navigation`):** The artificial intelligence pathfinding system. Usually used for routing NPCs in games, here it calculates the shortest walkable path between the user's real-world physical location and their chosen destination.
+- **Unity Web Request System:** Used by the application to talk to the project's external backend/database servers (e.g., sending analytics to `indoor-navigation-backend` via REST API POST requests).
+- **TextMesh Pro (`com.unity.textmeshpro`):** The standard Unity package for rendering high-quality, scalable UI text (used dynamically for signs, distance markers, and UI menus).
+- **C#:** The programming language used to script all the game logic, UI interactions, tracking states, and backend communication.
+
+## 4. Setup Instructions
+To run and develop this project locally, follow these steps:
+1. **Install Unity Hub:** Download and install Unity Hub from the official Unity website.
+2. **Install Unity Editor 2022.3.x:** Through Unity Hub, install the `2022.3` LTS version. Ensure you check the boxes for **Android Build Support** and/or **iOS Build Support** during installation.
+3. **Open the Project:** Add the cloned directory (`/home/aftab/Desktop/ar-nav-community-main`) to Unity Hub and open it.
+4. **Configure Vuforia:** In Unity, you must supply a Vuforia Developer License Key. Navigate to `Window > Vuforia Configuration` and paste your free or paid developer key.
+5. **Open Main Scene:** Go to `Assets/MyAssets/Scenes/` and double-click `JoshsDemoScene.unity` to load the application's starting scene.
+6. **Play / Build:** Hit the Play button in the Editor to test the logic (requires a webcam to simulate AR). To run on a mobile device, go to `File > Build Settings`, select Android or iOS, and hit **Build And Run** with a device connected via USB.
+
+## 5. Folder & File Breakdown
+
+### Root Directory
+- **`Assets/`**: Contains all the actual project files, 3D models, graphics, and C# scripts. This is where 99% of your development takes place.
+- **`Packages/`**: Contains `manifest.json`, which defines all the internal and external dependencies (like Vuforia, NavMesh, etc.) that Unity needs to download via the Package Manager.
+- **`ProjectSettings/`**: Contains global configuration data for the project (like input mappings, graphics quality, and Android/iOS build identifiers).
+- **`QCAR/`**: This directory is specifically used by Vuforia to store the raw tracking datasets/databases (like Point Clouds and 3D environment scans).
+- **`README.md`**: The repository's documentation file detailing project members, history, and links to the web app/backends.
+
+### Deep-dive into `Assets/MyAssets/`
+This is your custom application workspace:
+- **`Scripts/`**: All the C# code governing the app layout.
+  - **`ARNavController.cs`**: The brain of the routing. Receives a destination POI, and prompts the NavMesh to calculate an active path.
+  - **`ARPathVisualizer.cs`**: Reads the path computed by `ARNavController` and visually draws a line (or footprint models) on the AR camera feed so the user knows where to walk.
+  - **`ARStateController.cs`**: A state machine that manages the flow of the application (e.g., 'Looking for tracking', 'Environment Found', 'Navigating', 'Target Reached').
+  - **`BackendController.cs`**: Handles asynchronous API calls, mainly pushing visit analytics (`POIs` visited, `User identifiers`) to the server.
+  - **`CustomAreaTargetEventHandler.cs`**: Hooks into Vuforia events. Triggers events when Vuforia successfully recognizes the physical room the user is standing in.
+  - **`DataModel/` folder**: Contains structures mapped out for points of interest (`POI.cs`, `POISign.cs`, `AugmentedSpace.cs`), defining what interactive spots look like and what data they hold.
+- **`Scenes/`**: Contains `JoshsDemoScene.unity`, which is the primary level/scene environment where the AR Camera, Canvas UI, and backend controller are all tied together and instantiated.
+- **`Art/`, `Materials/`, `Media/`, `Prefab/`**: Standard Unity graphical folders containing the 3D props (like Footprints, Easter Eggs), UI sprites, and their color/texture material definitions.
