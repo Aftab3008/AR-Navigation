@@ -17,8 +17,11 @@ export async function createVenue(data: VenueFormValues) {
 
     revalidatePath("/");
     return { success: true };
-  } catch (error: any) {
+  } catch (error) {
     console.error("Failed to create venue:", error);
-    return { success: false, error: error.message };
+    if (error instanceof Error) {
+      return { success: false, error: error.message };
+    }
+    return { success: false, error: "An unexpected error occurred" };
   }
 }

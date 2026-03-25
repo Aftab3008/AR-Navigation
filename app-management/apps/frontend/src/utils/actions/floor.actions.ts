@@ -37,8 +37,11 @@ export async function createFloor(venueId: string, data: FloorFormValues) {
 
     revalidatePath(`/venues/${venueId}`);
     return { success: true };
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error creating floor", error);
-    return { success: false, error: error.message };
+    if (error instanceof Error) {
+      return { success: false, error: error.message };
+    }
+    return { success: false, error: "An unexpected error occurred" };
   }
 }

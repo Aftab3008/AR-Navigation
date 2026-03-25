@@ -58,8 +58,12 @@ export function CreatePoiDialog({
       } else {
         toast.error(res.error || "Failed to create POI");
       }
-    } catch (error: any) {
-      toast.error(error.message || "An unexpected error occurred");
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("An unexpected error occurred");
+      }
     } finally {
       setLoading(false);
     }
@@ -142,11 +146,17 @@ export function CreatePoiDialog({
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor={field.name}>X Coord</FieldLabel>
                   <Input
-                    {...field}
                     id={field.name}
+                    name={field.name}
+                    ref={field.ref}
+                    onBlur={field.onBlur}
                     type="number"
                     step="any"
                     value={field.value ?? ""}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      field.onChange(val === "" ? undefined : parseFloat(val));
+                    }}
                     aria-invalid={fieldState.invalid}
                     placeholder="0.00"
                   />
@@ -164,11 +174,17 @@ export function CreatePoiDialog({
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor={field.name}>Y Coord</FieldLabel>
                   <Input
-                    {...field}
                     id={field.name}
+                    name={field.name}
+                    ref={field.ref}
+                    onBlur={field.onBlur}
                     type="number"
                     step="any"
                     value={field.value ?? ""}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      field.onChange(val === "" ? undefined : parseFloat(val));
+                    }}
                     aria-invalid={fieldState.invalid}
                     placeholder="0.00"
                   />
@@ -186,11 +202,17 @@ export function CreatePoiDialog({
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor={field.name}>Z Coord</FieldLabel>
                   <Input
-                    {...field}
                     id={field.name}
+                    name={field.name}
+                    ref={field.ref}
+                    onBlur={field.onBlur}
                     type="number"
                     step="any"
                     value={field.value ?? ""}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      field.onChange(val === "" ? undefined : parseFloat(val));
+                    }}
                     aria-invalid={fieldState.invalid}
                     placeholder="0.00"
                   />

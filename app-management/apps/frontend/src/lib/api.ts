@@ -33,13 +33,17 @@ export async function fetchApi<T>(
     });
 
     return response.data;
-  } catch (error: any) {
-    if (error.response) {
+  } catch (error) {
+    if (error && typeof error === "object" && "response" in error) {
+      const err = error as any;
       throw new Error(
-        error.response.data?.message ||
-          `API Error: ${error.response.status} ${error.response.statusText}`,
+        err.response?.data?.message ||
+          `API Error: ${err.response?.status} ${err.response?.statusText}`,
       );
     }
-    throw new Error(`API Error: ${error.message}`);
+    if (error instanceof Error) {
+      throw new Error(`API Error: ${error.message}`);
+    }
+    throw new Error(`API Error: An unexpected error occurred`);
   }
 }

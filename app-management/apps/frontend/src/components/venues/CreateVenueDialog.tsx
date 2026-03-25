@@ -44,8 +44,12 @@ export function CreateVenueDialog() {
       } else {
         toast.error(res.error || "Failed to create venue");
       }
-    } catch (error: any) {
-      toast.error(error.message || "An unexpected error occurred");
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("An unexpected error occurred");
+      }
     } finally {
       setLoading(false);
     }
@@ -114,11 +118,17 @@ export function CreateVenueDialog() {
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor={field.name}>Latitude</FieldLabel>
                   <Input
-                    {...field}
                     id={field.name}
+                    name={field.name}
+                    ref={field.ref}
+                    onBlur={field.onBlur}
                     type="number"
                     step="any"
                     value={field.value ?? ""}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      field.onChange(val === "" ? undefined : parseFloat(val));
+                    }}
                     aria-invalid={fieldState.invalid}
                     placeholder="0.000"
                   />
@@ -136,11 +146,17 @@ export function CreateVenueDialog() {
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor={field.name}>Longitude</FieldLabel>
                   <Input
-                    {...field}
                     id={field.name}
+                    name={field.name}
+                    ref={field.ref}
+                    onBlur={field.onBlur}
                     type="number"
                     step="any"
                     value={field.value ?? ""}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      field.onChange(val === "" ? undefined : parseFloat(val));
+                    }}
                     aria-invalid={fieldState.invalid}
                     placeholder="0.000"
                   />
