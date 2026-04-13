@@ -1,7 +1,0 @@
-{
-  "venue_id": "college_01",
-  "pois": [
-    {"id": "science_lab", "name": "Science Lab", "x": 0.5, "y": 0, "z": 2.5},
-    {"id": "computer_lab", "name": "Computer Lab", "x": -2.0, "y": 0, "z": 4.1}
-  ]
-}

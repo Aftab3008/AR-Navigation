@@ -17,7 +17,8 @@ public class POIDmData
 public class POIDatabaseFetcher : MonoBehaviour
 {
     public static POIDatabaseFetcher instance;
-    public string backendUrl = "http://localhost:3000/api/venues/college_01/pois";
+    // The backend URL is now fetched from BackendConfig.Instance.BackendUrl
+    // public string backendUrl = "http://localhost:3000/api/venues/college_01/pois";
     
     // Assign the POI Prefab in the Inspector!
     public GameObject poiPrefab;
@@ -36,9 +37,13 @@ public class POIDatabaseFetcher : MonoBehaviour
         StartCoroutine(GetPOIs(parentSpace));
     }
 
+    [SerializeField]
+    private string endpoint = "/api/venues/college_01/pois";
+
     private IEnumerator GetPOIs(Transform parentSpace)
     {
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(backendUrl))
+        string fullUrl = BackendConfig.Instance.BackendUrl + endpoint;
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(fullUrl))
         {
             yield return webRequest.SendWebRequest();
 

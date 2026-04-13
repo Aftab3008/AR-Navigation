@@ -12,6 +12,11 @@ public class BackendController : MonoBehaviour
     void Awake()
     {
         instance = this;
+        // Initialize ServerURL from dynamic config if BackendConfig is present
+        if (BackendConfig.Instance != null && string.IsNullOrEmpty(ServerURL))
+        {
+            ServerURL = BackendConfig.Instance.BackendUrl;
+        }
     }
 
     public void SendVisitData(POI poi)

@@ -10,8 +10,8 @@ public class VenueLoader : MonoBehaviour
 {
     public static VenueLoader instance;
     
-    // The backend URL where the AssetBundle is hosted
-    private string backendUrl = "http://localhost:3000";
+    // The backend URL is now fetched from BackendConfig.Instance.BackendUrl
+    // private string backendUrl = "http://localhost:3000";
 
     // Event fired when the floor asset bundle is successfully loaded
     public delegate void OnVenueLoaded(GameObject environment);
@@ -34,7 +34,7 @@ public class VenueLoader : MonoBehaviour
 
     private IEnumerator DownloadAndLoadBundle(string assetBundleUrl)
     {
-        string fullUrl = backendUrl + assetBundleUrl;
+        string fullUrl = BackendConfig.Instance.BackendUrl + assetBundleUrl;
         Debug.Log("Downloading AssetBundle from: " + fullUrl);
 
         using (UnityWebRequest webRequest = UnityWebRequestAssetBundle.GetAssetBundle(fullUrl))
